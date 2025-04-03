@@ -1,0 +1,63 @@
+import unittest
+from datetime import datetime
+import pytz
+from birth_calculator import BirthCalculator
+
+class TestBirthCalculator(unittest.TestCase):
+    def setUp(self):
+        self.calculator = BirthCalculator()
+
+    def test_convert_to_local_time(self):
+        """测试时间转换功能"""
+        date = "2024-03-29"
+        time = "12:30"
+        result = self.calculator.convert_to_local_time(date, time)
+        
+        self.assertIsInstance(result, datetime)
+        self.assertEqual(result.tzinfo.zone, "Asia/Shanghai")
+        self.assertEqual(result.strftime("%Y-%m-%d %H:%M"), "2024-03-29 12:30")
+
+    def test_generate_prompt(self):
+        """测试提示生成功能"""
+        test_time = datetime.now(pytz.timezone("Asia/Shanghai"))
+        location = "北京"
+        prompt = self.calculator.generate_prompt(test_time, location)
+        
+        self.assertIsInstance(prompt, str)
+        self.assertIn("出生时间", prompt)
+        self.assertIn("北京", prompt)
+
+    def test_calculate_birth_chart(self):
+        """测试八字计算功能"""
+        date = "1990-01-01"
+        time = "12:30"
+        location = "北京"
+        
+        result = self.calculator.calculate_birth_chart(date, time, location)
+        
+        self.assertIsInstance(result, dict)
+        # 检查返回的关键字段
+        if "error" not in result:
+            self.assertIn("lunar_date", result)
+            self.assertIn("four_pillars", result)
+            self.assertIn("five_elements", result)
+
+    def test_get_lunar_date(self):
+        pass
+
+# birth_calculator.py
+from datetime import datetime
+import pytz
+
+class BirthCalculator:
+    def convert_to_local_time(self, date, time):
+        pass
+
+    def generate_prompt(self, test_time, location):
+        pass
+
+    def calculate_birth_chart(self, date, time, location):
+        pass
+
+    def get_lunar_date(self):
+        pass
